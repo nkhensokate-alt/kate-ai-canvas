@@ -14,4 +14,18 @@ describe("App routing", () => {
 
     expect(matches.at(-1)?.routeId).not.toBe(rootRouteId);
   });
+
+  it("provides all seven public portfolio pages", () => {
+    const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });
+    for (const path of ["/", "/about", "/skills", "/certifications", "/projects", "/education", "/contact"]) {
+      expect(router.matchRoutes(path).at(-1)?.routeId).toBe(path);
+    }
+  });
+
+  it("does not provide any authentication or account pages", () => {
+    const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });
+    for (const path of ["/login", "/signup", "/logout", "/forgot-password", "/account"]) {
+      expect(router.matchRoutes(path).at(-1)?.routeId).toBe(rootRouteId);
+    }
+  });
 });
